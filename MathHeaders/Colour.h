@@ -8,7 +8,7 @@ namespace MathClasses
         unsigned int colour;
 
         Colour() {
-            colour = 0b0;
+            colour = 0b11111111;
         };
 
         Colour(Byte red, Byte green, Byte blue, Byte alpha) {
@@ -20,8 +20,8 @@ namespace MathClasses
             colour |= static_cast<unsigned int>(alpha);
         }
 
-        Byte GetRed() const { 
-            return static_cast<Byte>((colour >> 24) & (0b11111111)); 
+        Byte GetRed() const {
+            return static_cast<Byte>((colour >> 24) & (0b11111111));
         }
         Byte GetGreen() const {
             return static_cast<Byte>((colour >> 16) & (0b11111111));
@@ -52,13 +52,7 @@ namespace MathClasses
         }
 
         bool operator==(const Colour& o) const {
-            if ((colour ^ o.colour) == 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return (colour ^ o.colour) == 0;
         }
-
     };
 }

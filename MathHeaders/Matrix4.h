@@ -1,3 +1,4 @@
+#define epsilon FLT_EPSILON
 #pragma once
 #include "Vector4.h"
 #include "Vector3.h"
@@ -69,15 +70,15 @@ namespace MathClasses
             Vector4 c4 = Vector4(m4, m8, m12, m16);
 
             return Matrix4(r1.Dot(c1), r1.Dot(c2), r1.Dot(c3), r1.Dot(c4),
-						r2.Dot(c1), r2.Dot(c2), r2.Dot(c3), r2.Dot(c4),
-						r3.Dot(c1), r3.Dot(c2), r3.Dot(c3), r3.Dot(c4),
-						r4.Dot(c1), r4.Dot(c2), r4.Dot(c3), r4.Dot(c4));
+                r2.Dot(c1), r2.Dot(c2), r2.Dot(c3), r2.Dot(c4),
+                r3.Dot(c1), r3.Dot(c2), r3.Dot(c3), r3.Dot(c4),
+                r4.Dot(c1), r4.Dot(c2), r4.Dot(c3), r4.Dot(c4));
         }
 
         explicit operator const float* () const {
             return &m1;
         }
-        
+
         explicit operator float* () {
             return &m1;
         }
@@ -105,7 +106,7 @@ namespace MathClasses
                 return m8;
             case 8:
                 return m9;
-            case 9: 
+            case 9:
                 return m10;
             case 10:
                 return m11;
@@ -124,42 +125,42 @@ namespace MathClasses
 
         const static Matrix4 MakeTranslation(const float x, const float y, const float z) {
             return Matrix4(1, 0, 0, 0,
-						   0, 1, 0, 0,
-						   0, 0, 1, 0,
-						   x, y, z, 1);
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                x, y, z, 1);
         }
         const static Matrix4 MakeTranslation(const Vector3& vec3) {
             return Matrix4(1, 0, 0, 0,
-						   0, 1, 0, 0,
-						   0, 0, 1, 0,
-						   vec3.x, vec3.y, vec3.z, 1);
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                vec3.x, vec3.y, vec3.z, 1);
         }
 
         const static Matrix4 MakeRotateX(const float theta) {
             return Matrix4(1, 0, 0, 0,
-						   0, cosf(theta), -sinf(theta), 0,
-                           0, sinf(theta), cosf(theta), 0,
-						   0, 0, 0, 1);
+                0, cosf(theta), -sinf(theta), 0,
+                0, sinf(theta), cosf(theta), 0,
+                0, 0, 0, 1);
         }
 
         const static Matrix4 MakeRotateY(const float theta) {
             return Matrix4(cosf(theta), 0, sinf(theta), 0,
-						   0, 1, 0, 0,
-						   -sinf(theta), 0, cos(theta), 0,
-							0, 0, 0, 1);
+                0, 1, 0, 0,
+                -sinf(theta), 0, cos(theta), 0,
+                0, 0, 0, 1);
         }
 
         const static Matrix4 MakeRotateZ(const float theta) {
             return Matrix4(cosf(theta), -sinf(theta), 0, 0,
-						   sinf(theta), cosf(theta), 0, 0,
-					       0, 0, 1, 0,
-						   0, 0, 0, 1);
+                sinf(theta), cosf(theta), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1);
         }
 
         const static Matrix4 MakeEuler(const float pitch, const float yaw, const float roll) {
             Matrix4 x = MakeRotateX(pitch);
             Matrix4 y = MakeRotateY(yaw);
-            Matrix4 z = MakeRotateZ(roll); 
+            Matrix4 z = MakeRotateZ(roll);
             return z * y * x;
         }
 
@@ -172,33 +173,69 @@ namespace MathClasses
 
         const static Matrix4 MakeScale(const float xscale, const float yscale, const float zscale) {
             return Matrix4(xscale, 0, 0, 0,
-						   0, yscale, 0, 0,
-						   0, 0, zscale, 0,
-						   0, 0, 0, 1);
+                0, yscale, 0, 0,
+                0, 0, zscale, 0,
+                0, 0, 0, 1);
         }
 
         const static Matrix4 MakeScale(const Vector3& vec3) {
             return Matrix4(vec3.x, 0, 0, 0,
-						   0, vec3.y, 0, 0,
-					       0, 0, vec3.z, 0,
-						   0, 0, 0, 1);
+                0, vec3.y, 0, 0,
+                0, 0, vec3.z, 0,
+                0, 0, 0, 1);
         }
 
         bool operator==(const Matrix4& other) const {
+            if (this->m1 == other.m1 &&
+                this->m2 == other.m2 &&
+                this->m3 == other.m3 &&
+                this->m4 == other.m4 &&
+                this->m5 == other.m5 &&
+                this->m6 == other.m6 &&
+                this->m7 == other.m7 &&
+                this->m8 == other.m8 &&
+                this->m9 == other.m9 &&
+                this->m10 == other.m10 &&
+                this->m11 == other.m11 &&
+                this->m12 == other.m12 &&
+                this->m13 == other.m13 &&
+                this->m14 == other.m14 &&
+                this->m15 == other.m15 &&
+                this->m16 == other.m16) {
             return true;
-        }
+             }
+        };
 
-        std::string ToString() const { return std::string("poop"); }
+        std::string ToString() const {
+            return std::to_string(m1) + " , " +
+                std::to_string(m2) + " , " +
+                std::to_string(m3) + " , " +
+                std::to_string(m4) + " , " + '\0' +
+                std::to_string(m5) + " , " +
+                std::to_string(m6) + " , " +
+                std::to_string(m7) + " , " +
+                std::to_string(m8) + " , " + '\0' +
+                std::to_string(m9) + " , " +
+                std::to_string(m10) + " , " +
+                std::to_string(m11) + " , " +
+                std::to_string(m12) + " , " + '\0' +
+                std::to_string(m13) + " , " +
+                std::to_string(m14) + " , " +
+                std::to_string(m15) + " , " +
+                std::to_string(m16);
+        } 
 
 
     };
 
 
     inline const Vector4 operator*(const Matrix4& matrix4, const Vector4& vec4) {
-        return Vector4(matrix4.m1 * vec4.x + matrix4.m2 * vec4.y + matrix4.m3 * vec4.z + matrix4.m4 * vec4.w,
-            matrix4.m5 * vec4.x + matrix4.m6 * vec4.y + matrix4.m7 * vec4.z + matrix4.m8 * vec4.w,
-            matrix4.m9 * vec4.x + matrix4.m10 * vec4.y + matrix4.m11 * vec4.z + matrix4.m12 * vec4.w,
-            matrix4.m13 * vec4.x + matrix4.m14 * vec4.y + matrix4.m15 * vec4.z + matrix4.m16 * vec4.w);
+        return Vector4(
+            vec4.x * matrix4.m1 + vec4.y * matrix4.m5 + vec4.z * matrix4.m9 + vec4.w * matrix4.m13,
+            vec4.x * matrix4.m2 + vec4.y * matrix4.m6 + vec4.z * matrix4.m10 + vec4.w * matrix4.m14,
+            vec4.x * matrix4.m3 + vec4.y * matrix4.m7 + vec4.z * matrix4.m11 + vec4.w * matrix4.m15,
+            vec4.x * matrix4.m4 + vec4.y * matrix4.m8 + vec4.z * matrix4.m12 + vec4.w * matrix4.m16
+        );
     }
 
 }

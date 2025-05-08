@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#define epsilon 0.00001
 namespace MathClasses
 {
     struct Vector4
@@ -23,7 +24,7 @@ namespace MathClasses
 		}
 
         const Vector4 Normalised() const {
-            const float magnitude = sqrtf(pow(x, 2) + pow(y, 2) + pow(z, 2));
+            const float magnitude = sqrtf(pow(x, 2) + pow(y, 2) + pow(z, 2) + pow(w,2));
             if (magnitude == 0.0f) {
                 return Vector4();
             }
@@ -31,7 +32,7 @@ namespace MathClasses
         }
 
         Vector4& Normalise() {
-            const float magnitude = sqrtf(pow(x, 2) + pow(y, 2) + pow(z, 2));
+            const float magnitude = sqrtf(pow(x, 2) + pow(y, 2) + pow(z, 2) + pow(w,2));
             if (magnitude == 0) {
                 x = 0; 
                 y = 0;
@@ -69,16 +70,14 @@ namespace MathClasses
         }
 
         bool operator==(const Vector4& other) const {
-            if (x == other.x && y == other.y && z == other.z && w == other.w) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return (abs(x - other.x) < epsilon && 
+                    abs(y - other.y) < epsilon &&
+                    abs(z - other.z) < epsilon &&
+                    abs(w - other.w) < epsilon);
         }
 
         bool operator!=(const Vector4& other) const {
-		    if (x == other.x, y == other.y, z == other.z, w == other.w) {
+		    if (x == other.x && y == other.y && z == other.z && w == other.w) {
                 return false;
             }
             else {
@@ -126,7 +125,7 @@ namespace MathClasses
             return &x;
         }
 
-        std::string ToString() const { return std::string("poop"); }
+        std::string ToString() const { return std::to_string(x) + " , " + std::to_string(y) + " , " + std::to_string(z) + " , " + std::to_string(w); }
 
  	};
 

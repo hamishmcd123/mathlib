@@ -182,14 +182,25 @@ namespace MathClasses
             }
         }
 
-        std::string ToString() const { return std::to_string(m1) + ", " +
+        std::string ToString() const {
+            return std::to_string(m1) + " , " +
+                std::to_string(m2) + " , " +
+                std::to_string(m3) + " , " + '\0' +
+                std::to_string(m4) + " , " +
+                std::to_string(m5) + " , " +
+                std::to_string(m6) + " , " + '\0' +
+                std::to_string(m7) + " , " +
+                std::to_string(m8) + " , " +
+                std::to_string(m9);
                                 }
 };
 
 	inline const Vector3 operator*(const Matrix3& matrix3, const Vector3& vec3) {
-        return Vector3(matrix3.m1 * vec3.x + matrix3.m2 * vec3.y + matrix3.m3 * vec3.z,
-                       matrix3.m4 * vec3.x + matrix3.m5 * vec3.y + matrix3.m6 * vec3.z,
-                       matrix3.m7 * vec3.x + matrix3.m8 * vec3.y + matrix3.m9 * vec3.z);
+        return Vector3(
+            matrix3.m1 * vec3.x + matrix3.m4 * vec3.y + matrix3.m7 * vec3.z,
+            matrix3.m2 * vec3.x + matrix3.m5 * vec3.y + matrix3.m8 * vec3.z,
+            matrix3.m3 * vec3.x + matrix3.m6 * vec3.y + matrix3.m9 * vec3.z
+        );
     }
 
 

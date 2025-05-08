@@ -1,4 +1,5 @@
 #pragma once
+#define epsilon 0.000005
 #include <string>
 
 namespace MathClasses
@@ -73,12 +74,9 @@ namespace MathClasses
         }
 
         bool operator==(const Vector3& other) const {
-            if (x == other.x && y == other.y && z == other.z) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return (abs(x - other.x) < epsilon && 
+                    abs(y - other.y) < epsilon &&
+                    abs(z - other.z) < epsilon);
         }
 
         bool operator!=(const Vector3& other) {
@@ -131,7 +129,7 @@ namespace MathClasses
             return &x;
         } 
 
-        std::string ToString() const { return std::string("poop"); }
+        std::string ToString() const { return std::to_string(x) + " , " + std::to_string(y) + " , " + std::to_string(z); }
   	};
 
 
