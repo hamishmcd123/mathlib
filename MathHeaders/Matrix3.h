@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include <string>
+#define epsilon 0.005
 namespace MathClasses
 {
     struct Matrix3
@@ -49,17 +50,17 @@ namespace MathClasses
         friend const Vector3 operator*(const Matrix3& matrix3, const Vector3& vec3);
 
         const Matrix3 operator*(const Matrix3& other) const {
-            Vector3 r1 = Vector3(m1, m2, m3);
-            Vector3 r2 = Vector3(m4, m5, m6);
-            Vector3 r3 = Vector3(m7, m8, m9);
+            Vector3 r1 = Vector3(m1, m4, m7);
+            Vector3 r2 = Vector3(m2, m5, m8);
+            Vector3 r3 = Vector3(m3, m6, m9);
 
-            Vector3 c1 = Vector3(other.m1, other.m4, other.m7);
-            Vector3 c2 = Vector3(other.m2, other.m5, other.m8);
-            Vector3 c3 = Vector3(other.m3, other.m6, other.m9);
+            Vector3 c1 = Vector3(other.m1, other.m2, other.m3);
+            Vector3 c2 = Vector3(other.m4, other.m5, other.m6);
+            Vector3 c3 = Vector3(other.m7, other.m8, other.m9);
 
-            return Matrix3(r1.Dot(c1), r1.Dot(c2), r1.Dot(c3),
-						   r2.Dot(c1), r2.Dot(c2), r2.Dot(c3),
-                           r3.Dot(c1), r3.Dot(c2), r3.Dot(c3));
+            return Matrix3(r1.Dot(c1), r2.Dot(c1), r3.Dot(c1),
+						   r1.Dot(c2), r2.Dot(c2), r3.Dot(c2),
+                           r1.Dot(c3), r2.Dot(c3), r3.Dot(c3));
         }
 
         const Matrix3 Transposed() const {
@@ -112,26 +113,26 @@ namespace MathClasses
         static const Matrix3 MakeTranslation(const Vector3& other) {
             return Matrix3(1, 0, 0,
 						   0, 1, 0,
-						other.x, other.y, other.z);
+						   other.x, other.y, other.z);
         }
 
         static const Matrix3 MakeRotateX(const float theta) {
             return Matrix3(1, 0, 0,
-						   0, cosf(theta), -sinf(theta),
-						   0, sinf(theta), cosf(theta));
+                0, cosf(theta), -sinf(theta),
+                0, sinf(theta), cosf(theta));
         }
 
         static const Matrix3 MakeRotateY(const float theta) {
             return Matrix3(cosf(theta), 0, sinf(theta),
-									0, 1, 0,
-							-sinf(theta), 0, cosf(theta));
+								0, 1, 0,
+						-sinf(theta), 0, cosf(theta));
         }
 
         static const Matrix3 MakeRotateZ(const float theta) {
 
-            return Matrix3(cosf(theta), -sinf(theta), 0,
-						   sinf(theta), cosf(theta), 0,
-							0, 0, 1);
+            return Matrix3(cosf(theta), sinf(theta), 0,
+					-sinf(theta), cosf(theta), 0,
+						0, 0, 1);
         }
         
         static const Matrix3 MakeEuler(const float pitch, const float yaw, const float roll) {
@@ -145,7 +146,7 @@ namespace MathClasses
             Matrix3 x = MakeRotateX(vec3.x);
             Matrix3 y = MakeRotateY(vec3.y);
             Matrix3 z = MakeRotateZ(vec3.z);
-            return z * x * y;
+            return z * y * x;
         }
 
         static const Matrix3 MakeScale(const float xscale, const float yscale, const float zscale) {
@@ -169,26 +170,27 @@ namespace MathClasses
 
         
         bool operator==(const Matrix3& other) const {
-            if (this->m1 == other.m1 &&
-                this->m2 == other.m2 &&
-                this->m3 == other.m3 &&
-                this->m4 == other.m4 &&
-                this->m5 == other.m5 &&
-                this->m6 == other.m6 &&
-                this->m7 == other.m7 &&
-                this->m8 == other.m8 &&
-                this->m9 == other.m9) {
+            if (abs(this->m1 - other.m1) < epsilon &&
+                abs(this->m2 - other.m2) < epsilon &&
+                abs(this->m3 - other.m3) < epsilon &&
+                abs(this->m4 - other.m4) < epsilon &&
+                abs(this->m5 - other.m5) < epsilon &&
+                abs(this->m6 - other.m6) < epsilon &&
+                abs(this->m7 - other.m7) < epsilon &&
+                abs(this->m8 - other.m8) < epsilon &&
+                abs(this->m9 - other.m9) < epsilon) {
                 return true;
             }
+            return false;
         }
 
         std::string ToString() const {
             return std::to_string(m1) + " , " +
                 std::to_string(m2) + " , " +
-                std::to_string(m3) + " , " + '\0' +
+                std::to_string(m3) + " , " + '\n' +
                 std::to_string(m4) + " , " +
                 std::to_string(m5) + " , " +
-                std::to_string(m6) + " , " + '\0' +
+                std::to_string(m6) + " , " + '\n' +
                 std::to_string(m7) + " , " +
                 std::to_string(m8) + " , " +
                 std::to_string(m9);

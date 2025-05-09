@@ -47,7 +47,7 @@ namespace MathClasses
         }
 
         const float Dot(const Vector4& other) const{
-            return x * other.x + y * other.y + z * other.z;
+            return x * other.x + y * other.y + z * other.z + w * other.w;
         }
 
         const Vector4 Cross(const Vector4& other) const {

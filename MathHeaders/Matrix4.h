@@ -1,4 +1,4 @@
-#define epsilon FLT_EPSILON
+#define epsilon 0.005
 #pragma once
 #include "Vector4.h"
 #include "Vector3.h"
@@ -59,20 +59,20 @@ namespace MathClasses
         friend const Vector4 operator*(const Matrix4& matrix4, const Vector4& vec4);
 
         const Matrix4 operator*(const Matrix4& other) const {
-            Vector4 r1 = Vector4(m1, m2, m3, m4);
-            Vector4 r2 = Vector4(m5, m6, m7, m8);
-            Vector4 r3 = Vector4(m9, m10, m11, m12);
-            Vector4 r4 = Vector4(m13, m14, m15, m16);
+            Vector4 r1 = Vector4(m1, m5, m9, m13);
+            Vector4 r2 = Vector4(m2, m6, m10, m14);
+            Vector4 r3 = Vector4(m3, m7, m11, m15);
+            Vector4 r4 = Vector4(m4, m8, m12, m16);
 
-            Vector4 c1 = Vector4(m1, m5, m9, m13);
-            Vector4 c2 = Vector4(m2, m6, m10, m14);
-            Vector4 c3 = Vector4(m3, m7, m11, m15);
-            Vector4 c4 = Vector4(m4, m8, m12, m16);
+            Vector4 c1 = Vector4(other.m1, other.m2, other.m3, other.m4);
+            Vector4 c2 = Vector4(other.m5, other.m6, other.m7, other.m8);
+            Vector4 c3 = Vector4(other.m9, other.m10, other.m11, other.m12);
+            Vector4 c4 = Vector4(other.m13, other.m14, other.m15, other.m16);
 
-            return Matrix4(r1.Dot(c1), r1.Dot(c2), r1.Dot(c3), r1.Dot(c4),
-                r2.Dot(c1), r2.Dot(c2), r2.Dot(c3), r2.Dot(c4),
-                r3.Dot(c1), r3.Dot(c2), r3.Dot(c3), r3.Dot(c4),
-                r4.Dot(c1), r4.Dot(c2), r4.Dot(c3), r4.Dot(c4));
+            return Matrix4(r1.Dot(c1), r2.Dot(c1), r3.Dot(c1), r4.Dot(c1),
+                r1.Dot(c2), r2.Dot(c2), r3.Dot(c2), r4.Dot(c2),
+                r1.Dot(c3), r2.Dot(c3), r3.Dot(c3), r4.Dot(c3),
+                r1.Dot(c4), r2.Dot(c4), r3.Dot(c4), r4.Dot(c4));
         }
 
         explicit operator const float* () const {
@@ -133,7 +133,7 @@ namespace MathClasses
             return Matrix4(1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                vec3.x, vec3.y, vec3.z, 1);
+                vec3.x,vec3.y,vec3.z , 1);
         }
 
         const static Matrix4 MakeRotateX(const float theta) {
@@ -146,13 +146,13 @@ namespace MathClasses
         const static Matrix4 MakeRotateY(const float theta) {
             return Matrix4(cosf(theta), 0, sinf(theta), 0,
                 0, 1, 0, 0,
-                -sinf(theta), 0, cos(theta), 0,
+                -sinf(theta), 0, cosf(theta), 0,
                 0, 0, 0, 1);
         }
 
         const static Matrix4 MakeRotateZ(const float theta) {
-            return Matrix4(cosf(theta), -sinf(theta), 0, 0,
-                sinf(theta), cosf(theta), 0, 0,
+            return Matrix4(cosf(theta), sinf(theta), 0, 0,
+                -sinf(theta), cosf(theta), 0, 0,
                 0, 0, 1, 0,
                 0, 0, 0, 1);
         }
@@ -186,39 +186,37 @@ namespace MathClasses
         }
 
         bool operator==(const Matrix4& other) const {
-            if (this->m1 == other.m1 &&
-                this->m2 == other.m2 &&
-                this->m3 == other.m3 &&
-                this->m4 == other.m4 &&
-                this->m5 == other.m5 &&
-                this->m6 == other.m6 &&
-                this->m7 == other.m7 &&
-                this->m8 == other.m8 &&
-                this->m9 == other.m9 &&
-                this->m10 == other.m10 &&
-                this->m11 == other.m11 &&
-                this->m12 == other.m12 &&
-                this->m13 == other.m13 &&
-                this->m14 == other.m14 &&
-                this->m15 == other.m15 &&
-                this->m16 == other.m16) {
-            return true;
-             }
-        };
+            return (abs(this->m1 - other.m1) < epsilon &&
+                abs(this->m2 - other.m2) < epsilon &&
+                abs(this->m3 - other.m3) < epsilon &&
+                abs(this->m4 - other.m4) < epsilon &&
+                abs(this->m5 - other.m5) < epsilon &&
+                abs(this->m6 - other.m6) < epsilon &&
+                abs(this->m7 - other.m7) < epsilon &&
+                abs(this->m8 - other.m8) < epsilon &&
+                abs(this->m9 - other.m9) < epsilon &&
+                abs(this->m10 - other.m10) < epsilon &&
+                abs(this->m11 - other.m11) < epsilon &&
+                abs(this->m12 - other.m12) < epsilon &&
+                abs(this->m13 - other.m13) < epsilon &&
+                abs(this->m14 - other.m14) < epsilon &&
+                abs(this->m15 - other.m15) < epsilon &&
+                abs(this->m16 - other.m16) < epsilon);
+        }
 
         std::string ToString() const {
             return std::to_string(m1) + " , " +
                 std::to_string(m2) + " , " +
                 std::to_string(m3) + " , " +
-                std::to_string(m4) + " , " + '\0' +
+                std::to_string(m4) + " , " + '\n' +
                 std::to_string(m5) + " , " +
                 std::to_string(m6) + " , " +
                 std::to_string(m7) + " , " +
-                std::to_string(m8) + " , " + '\0' +
+                std::to_string(m8) + " , " + '\n' +
                 std::to_string(m9) + " , " +
                 std::to_string(m10) + " , " +
                 std::to_string(m11) + " , " +
-                std::to_string(m12) + " , " + '\0' +
+                std::to_string(m12) + " , " + '\n' +
                 std::to_string(m13) + " , " +
                 std::to_string(m14) + " , " +
                 std::to_string(m15) + " , " +
